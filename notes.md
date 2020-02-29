@@ -147,6 +147,16 @@ module.exports = {
 - Add `module.exports = (req, res, next) => etc`
 - See `restricted-middleware.js` for details
 
+## Add folders and files
+- issues
+  - `issues-router.js`
+  - `issues-model.js`
+  - add endpoints and models
+- states
+  - `states-router.js`
+  - `states-model.js`
+  - add endpoints and models
+
 
 -----TO DO-----
 ## Initialize knex
