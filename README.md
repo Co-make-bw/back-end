@@ -39,6 +39,8 @@
 | GET          | /api/users/:id                 | Returns User By ID        |
 | PUT          | /api/users/:id                 | Update User               |
 | DELETE       | /api/users/:id                 | Remove User               |
+| GET          | /api/users/:id/states          | Returns User states       |
+| PUT          | /api/users/:id/states          | Update User states        |
 ## States
 | Request Type | Endpoint                       | Description               |
 |:------------:|:------------------------------:|:-------------------------:|
