@@ -54,8 +54,16 @@ router.get('/:id/issues', (req, res) => {
 
 })
 
-router.get('/:id/issues/:id', (req, res) => {
-
+router.get('/:id/issues/:id2', (req, res) => {
+    const id = req.params.id2
+    States.getIssueById(id)
+        .then(issue => {
+            res.status(200).json(issue)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to get issue' })
+        })
 })
 
 router.post('/:id/issues', (req, res) => {
@@ -72,8 +80,17 @@ router.post('/:id/issues', (req, res) => {
         })
 })
 
-router.delete('/:id/issues/:id', (req, res) => {
+router.delete('/:id/issues/:id2', (req, res) => {
+    const id = req.params.id2;
 
+    States.removeIssue(id)
+        .then(deleted => {
+            res.status(200).json(deleted)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to remove issue' })
+        })
 })
 
 router.put('/:id/issues/:id', (req, res) => {

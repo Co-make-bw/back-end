@@ -16,13 +16,16 @@ function get() {
 }
 
 function getBy(filter) {
-    return db('users').where(filter)
+    return db('users')
+        .where(filter)
+        .select('id', 'username', 'points', 'about')
 }
 
 function getById(id) {
     return db('users')
         .where({ id })
-        .first();
+        .first()
+        .select('id', 'username', 'points', 'about')
 }
 
 async function add(user) {
@@ -48,6 +51,7 @@ function getStates(user_id) {
         .join('states', 'user_states.state_id', 'states.id')
         .join('users', 'user_states.user_id', 'users.id')
         .where({user_id: user_id})
+        .select('states.name as state', 'user_states.state_id')
 }
 
 // function addState(state_id) {

@@ -6,7 +6,8 @@ module.exports = {
     add,
     addIssue,
     getIssueById,
-    getIssues
+    getIssues,
+    removeIssue
 };
 
 function get() {
@@ -49,4 +50,11 @@ function getIssues(state_id) {
     return db('issues')
         .join('states', 'issues.state_id', 'states.id')
         .where({state_id: state_id})
+        .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id')
+}
+
+function removeIssue(id) {
+    return db('issues')
+        .where({id})
+        .del()
 }
