@@ -39,6 +39,8 @@
 | GET          | /api/users/:id                 | Returns User By ID        |
 | PUT          | /api/users/:id                 | Update User               |
 | DELETE       | /api/users/:id                 | Remove User               |
+| GET          | /api/users/:id/states          | Returns User states       |
+| PUT          | /api/users/:id/states          | Update User states        |
 ## States
 | Request Type | Endpoint                       | Description               |
 |:------------:|:------------------------------:|:-------------------------:|
@@ -47,16 +49,16 @@
 | POST         | /api/states                    | Creates state             |
 | PUT          | /api/states/:id                | Update state              |
 | DELETE       | /api/states/:id                | Removes state             |
-## Issues
-| Request Type | Endpoint                       | Description               |
-|:------------:|:------------------------------:|:-------------------------:|
-| GET          | /api/issues                    | Returns all issues        |
-| GET          | /api/issues/:id                | Returns issue by ID       |
 | GET          | /api/states/:id/issues         | Returns all state issues  |
 | GET          | /api/states/:id/issues/:id     | Returns state issue by ID |
 | POST         | /api/states/:id/issues         | Create issue for state    |
 | DELETE       | /api/states/:id/issues/:id     | Remove issue from state   |
 | PUT          | /api/states/:id/issues/:id     | Updates issue from state  |
+## Issues
+| Request Type | Endpoint                       | Description               |
+|:------------:|:------------------------------:|:-------------------------:|
+| GET          | /api/issues                    | Returns all issues        |
+| GET          | /api/issues/:id                | Returns issue by ID       |
 
 # API
 ## Auth routes
