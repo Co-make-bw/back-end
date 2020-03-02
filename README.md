@@ -40,15 +40,12 @@
 | PUT          | /api/users/:id                 | Update User               |
 | DELETE       | /api/users/:id                 | Remove User               |
 | GET          | /api/users/:id/states          | Returns User states       |
-| PUT          | /api/users/:id/states          | Update User states        |
+| POST         | /api/users/:id/states          | Add state to user         |
 ## States
 | Request Type | Endpoint                       | Description               |
 |:------------:|:------------------------------:|:-------------------------:|
 | GET          | /api/states                    | Returns all states        |
 | GET          | /api/states/:id                | Returns state by ID       |
-| POST         | /api/states                    | Creates state             |
-| PUT          | /api/states/:id                | Update state              |
-| DELETE       | /api/states/:id                | Removes state             |
 | GET          | /api/states/:id/issues         | Returns all state issues  |
 | GET          | /api/states/:id/issues/:id     | Returns state issue by ID |
 | POST         | /api/states/:id/issues         | Create issue for state    |
