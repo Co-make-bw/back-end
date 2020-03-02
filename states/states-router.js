@@ -93,8 +93,17 @@ router.delete('/:id/issues/:id2', (req, res) => {
         })
 })
 
-router.put('/:id/issues/:id', (req, res) => {
-    
+router.put('/:id/issues/:id2', (req, res) => {
+    const id = req.params.id2;
+
+    States.updateIssue(id, req.body)
+        .then(updated => {
+            res.status(201).json(updated)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({message: 'Failed to edit issue' })
+        })
 })
 
 module.exports = router;

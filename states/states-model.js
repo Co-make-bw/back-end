@@ -7,7 +7,8 @@ module.exports = {
     addIssue,
     getIssueById,
     getIssues,
-    removeIssue
+    removeIssue,
+    updateIssue
 };
 
 function get() {
@@ -57,4 +58,10 @@ function removeIssue(id) {
     return db('issues')
         .where({id})
         .del()
+}
+
+function updateIssue(id, changes) {
+    return db('issues')
+        .where({id})
+        .update(changes)
 }

@@ -18,7 +18,6 @@ function get() {
 function getBy(filter) {
     return db('users')
         .where(filter)
-        .select('id', 'username', 'points', 'about')
 }
 
 function getById(id) {
