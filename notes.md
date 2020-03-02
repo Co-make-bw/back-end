@@ -158,7 +158,6 @@ module.exports = {
   - add endpoints and models
 
 
------TO DO-----
 ## Initialize knex
 - `knex init`
 
@@ -166,7 +165,7 @@ module.exports = {
 **BEFORE**
 ```js
 module.exports = {
-
+  
   development: {
     client: 'sqlite3',
     connection: {
@@ -183,6 +182,7 @@ module.exports = {
 - Create a table however you please
 - Add migration `knex migrate:latest`
 
+  -----TO DO-----
 ## Prepare for adding seeds
 - Run `npm install knex-cleaner`
 - Run `knex seed:make 00-cleanup`
@@ -193,7 +193,7 @@ const cleaner = require('knex-cleaner');
 exports.seed = function(knex) {
   return cleaner.clean(knex, {
     // resets ids
-    mode: 'truncate',
+    mode: 'delete',
     // don't empty migration tables
     ignoreTables: ['knex_migrations', 'knex_migrations_lock'], 
   });
