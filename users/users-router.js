@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Users = require('./users-model');
 
+const middleware = require('../auth/verify-middleware');
+const verify = middleware.verifyUser;
+// Get all users
 router.get('/', (req, res) => {
 
     Users.get()
@@ -14,7 +17,8 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/:id', (req, res) => {
+// Get user by id
+router.get('/:id', verify, (req, res) => {
     const {id} = req.params;
 
     Users.getById(id)
@@ -31,7 +35,8 @@ router.get('/:id', (req, res) => {
         })
 })
 
-router.put('/:id', (req, res) => {
+// Update user
+router.put('/:id', verify, (req, res) => {
     const {id} = req.params;
 
     Users.update(id, req.body)
@@ -47,27 +52,40 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const {id} = req.params;
 
-    Users.remove(id)
-        .then(deleted => {
-            res.status(200).json(deleted)
+    Users.getById(id)
+        .then(user => {
+            if(user) {
+                Users.remove(id)
+                    .then(deleted => {
+                        res.status(200).json({message: `You deleted ${user.username}`})
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).json({ message: 'Failed to delete user' })
+                    })
+            } else {
+                res.status(404).json({message: 'User with given ID does not exist' })
+            }
         })
         .catch(err => {
-            console.log(err)
-            res.status(500).json({ message: 'Failed to delete user' })
+            res.status(500).json({message: 'Failed to find user' })
         })
 })
 
-router.get('/:id/states', (req, res) => {
+router.get('/:id/states', verify, (req, res) => {
     const {id} = req.params;
 
     Users.getStates(id)
         .then(states => {
-            res.status(200).json(states)
+            if(states.length < 1) {
+                res.status(404).json({message: 'User does not follow any states' })
+            } else {
+                res.status(200).json(states)
+            }
         })
         .catch(err => {
             console.log(err)
             res.status(500).json({message: 'Failed to get user states' })
         })
 })
-
 module.exports = router;

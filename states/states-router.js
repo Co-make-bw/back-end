@@ -1,6 +1,9 @@
 const router = require('express').Router();
-
 const States = require('./states-model');
+
+const middleware = require('../auth/verify-middleware');
+const verifyState = middleware.verifyState;
+const verifyIssue = middleware.verifyIssue;
 
 router.get('/', (req, res) => {
     States.get()
@@ -26,9 +29,8 @@ router.get('/', (req, res) => {
 //         })
 // })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', verifyState, (req, res) => {
     const {id} = req.params;
-    console.log(req.decodedToken.subject)
 
     States.getById(id)
         .then(state => {
@@ -40,12 +42,16 @@ router.get('/:id', (req, res) => {
         })
 })
 
-router.get('/:id/issues', (req, res) => {
+router.get('/:id/issues', verifyState, (req, res) => {
     const {id} = req.params;
 
     States.getIssues(id)
         .then(issues => {
-            res.status(200).json(issues)
+            if(issues.length < 1) {
+                res.status(404).json({message: 'This state is awesome, there are no open issues!'})
+            } else {
+                res.status(200).json(issues)
+            }
         })
         .catch(err => {
             console.log(err)
@@ -54,11 +60,15 @@ router.get('/:id/issues', (req, res) => {
 
 })
 
-router.get('/:id/issues/:id2', (req, res) => {
+router.get('/:id/issues/:id2', verifyState, (req, res) => {
     const id = req.params.id2
     States.getIssueById(id)
         .then(issue => {
-            res.status(200).json(issue)
+            if(issue) {
+                res.status(200).json(issue)
+            } else {
+                res.status(404).json({message: 'Issue with given ID does not exist' })
+            }
         })
         .catch(err => {
             console.log(err)
@@ -66,7 +76,7 @@ router.get('/:id/issues/:id2', (req, res) => {
         })
 })
 
-router.post('/:id/issues', (req, res) => {
+router.post('/:id/issues', verifyState, (req, res) => {
     req.body.state_id = req.params.id;
     req.body.user_id = req.decodedToken.subject
 
@@ -80,7 +90,7 @@ router.post('/:id/issues', (req, res) => {
         })
 })
 
-router.delete('/:id/issues/:id2', (req, res) => {
+router.delete('/:id/issues/:id2', verifyState, verifyIssue, (req, res) => {
     const id = req.params.id2;
 
     States.removeIssue(id)
@@ -93,7 +103,7 @@ router.delete('/:id/issues/:id2', (req, res) => {
         })
 })
 
-router.put('/:id/issues/:id2', (req, res) => {
+router.put('/:id/issues/:id2', verifyState, verifyIssue, (req, res) => {
     const id = req.params.id2;
 
     States.updateIssue(id, req.body)

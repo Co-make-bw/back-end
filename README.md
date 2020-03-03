@@ -7,26 +7,27 @@
 ## Users
 ```js
 {
-    username: string,
-    password: string,
-    points: integer
+    username: string, // Required
+    password: string, // Required
+    about: text, // Required
+    points: integer // Required
 }
 ```
 ## Issues
 ```js
 {
-    title: string,
-    description: string,
-    upvotes: integer,
-    location: string,
-    user_id: integer,
-    state_id: integer
+    title: string, // Required
+    description: string, // Required
+    location: string, // Required
+    upvotes: integer, // Defaults to 0
+    user_id: integer, // Foreign key required
+    state_id: integer // Foreign key required
 }
 ```
 ## States
 ```js
 {
-    name: string,
+    name: string, // Required
 }
 ```
 # Endpoints
@@ -84,6 +85,14 @@
 - Returns all users in database
 ### GET `/api/users/:id`
 - Returns user with matching id
+```js
+{
+    id: 9,
+    username: "Bob",
+    points: 0,
+    about: "I drive my Miata up and down the east coast weekly."
+}
+```
 ### PUT `/api/users/:id`
 - Updates user information
 
@@ -92,7 +101,8 @@
 {
     username: string,
     password: string,
-    points: integer
+    points: integer,
+    about: text
 }
 ```
 ### DELETE `/api/users/:id`
