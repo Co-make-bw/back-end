@@ -56,6 +56,7 @@ router.put('/:id', verify, (req, res) => {
 
 })
 
+// Delete user
 router.delete('/:id', verify, (req, res) => {
     const {id} = req.params;
 
@@ -75,6 +76,7 @@ router.delete('/:id', verify, (req, res) => {
         })
 })
 
+// Get user states
 router.get('/:id/states', verify, (req, res) => {
     const {id} = req.params;
 
@@ -89,6 +91,20 @@ router.get('/:id/states', verify, (req, res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({message: 'Failed to get user states' })
+        })
+})
+
+// Add state to user
+router.post('/:id/states', verify, (req, res) => {
+    const user_id = req.params.id;
+    
+    Users.addUserState(user_id, req.body.state_id)
+        .then(states => {
+            res.status(200).json(states)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to add state to user' })
         })
 })
 module.exports = router;

@@ -136,6 +136,55 @@
 }
 ```
 
+### GET `api/users/:id/states`
+- Returns an array of states the user follows
+```js
+[
+    {
+        state: "Alabama",
+        state_id: 1
+    },
+    {
+        state: "Alaska",
+        state_id: 2
+    },
+    {
+        state: "Arizona",
+        state_id: 3
+    }
+]
+```
+
+### POST `api/users/:id/states`
+- Adds a state to a users followed states
+**Expects the following shape :**
+```js
+{
+	state_id: 21
+}
+```
+- Returns an updated array of states the user follows
+```js
+[
+    {
+        state: "Alabama",
+        state_id: 1
+    },
+    {
+        state: "Alaska",
+        state_id: 2
+    },
+    {
+        state: "Arizona",
+        state_id: 3
+    },
+    {
+        state: "Massachusetts",
+        state_id: 21
+    }
+]
+```
+
 ## State routes
 ----------------
 ### GET `/api/states`

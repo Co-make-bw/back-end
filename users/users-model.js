@@ -8,6 +8,7 @@ module.exports = {
     update,
     remove,
     getStates,
+    addUserState
 }
 
 function get() {
@@ -50,4 +51,13 @@ function getStates(user_id) {
         .join('users', 'user_states.user_id', 'users.id')
         .where({user_id: user_id})
         .select('states.name as state', 'user_states.state_id')
+}
+
+function addUserState(user_id, state) {
+    return db('user_states')
+        .insert({user_id: user_id, state_id: state})
+        .then(res => {
+            
+            return getStates(user_id)
+        })
 }
