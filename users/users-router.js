@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Users = require('./users-model');
 
+const middleware = require('../auth/verify-middleware');
+const verify = middleware.verifyUser;
+// Get all users
 router.get('/', (req, res) => {
 
     Users.get()
@@ -14,7 +17,8 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/:id', (req, res) => {
+// Get user by id
+router.get('/:id', verify, (req, res) => {
     const {id} = req.params;
 
     Users.getById(id)
@@ -31,12 +35,20 @@ router.get('/:id', (req, res) => {
         })
 })
 
-router.put('/:id', (req, res) => {
+// Update user
+router.put('/:id', verify, (req, res) => {
     const {id} = req.params;
 
     Users.update(id, req.body)
         .then(updated => {
-            res.status(200).json(updated)
+            Users.getById(id)
+                .then(user => {
+                    res.status(201).json(user)
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to get user' })
+                })
         })
         .catch(err => {
             console.log(err)
@@ -44,25 +56,37 @@ router.put('/:id', (req, res) => {
 
 })
 
-router.delete('/:id', (req, res) => {
+// Delete user
+router.delete('/:id', verify, (req, res) => {
     const {id} = req.params;
 
-    Users.remove(id)
-        .then(deleted => {
-            res.status(200).json(deleted)
+    Users.getById(id)
+        .then(user => {
+            Users.remove(id)
+                .then(deleted => {
+                    res.status(200).json({message: `You deleted username: ${user.username}`})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to delete user' })
+                })
         })
         .catch(err => {
-            console.log(err)
-            res.status(500).json({ message: 'Failed to delete user' })
+            res.status(500).json({message: 'Failed to find user' })
         })
 })
 
-router.get('/:id/states', (req, res) => {
+// Get user states
+router.get('/:id/states', verify, (req, res) => {
     const {id} = req.params;
 
     Users.getStates(id)
         .then(states => {
-            res.status(200).json(states)
+            if(states.length < 1) {
+                res.status(404).json({message: 'User does not follow any states' })
+            } else {
+                res.status(200).json(states)
+            }
         })
         .catch(err => {
             console.log(err)
@@ -70,4 +94,17 @@ router.get('/:id/states', (req, res) => {
         })
 })
 
+// Add state to user
+router.post('/:id/states', verify, (req, res) => {
+    const user_id = req.params.id;
+    
+    Users.addUserState(user_id, req.body.state_id)
+        .then(states => {
+            res.status(200).json(states)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to add state to user' })
+        })
+})
 module.exports = router;

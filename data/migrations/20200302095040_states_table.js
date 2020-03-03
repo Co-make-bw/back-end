@@ -1,7 +1,7 @@
 
 exports.up = function(knex) {
     return knex.schema.createTable('states', table => {
-        table.increments()
+        table.increments('id')
 
         table.string('name', 128)
             .notNullable()
