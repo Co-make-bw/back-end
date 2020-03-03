@@ -8,11 +8,10 @@ module.exports = {
     update,
     remove,
     getStates,
-    // addState
 }
 
 function get() {
-    return db('users').select('id', 'username', 'points', 'about');
+    return db('users').select('id', 'username', 'points', 'about').orderBy('id')
 }
 
 function getBy(filter) {
@@ -52,7 +51,3 @@ function getStates(user_id) {
         .where({user_id: user_id})
         .select('states.name as state', 'user_states.state_id')
 }
-
-// function addState(state_id) {
-//     return db('user_states')
-// }

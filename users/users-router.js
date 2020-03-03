@@ -41,7 +41,14 @@ router.put('/:id', verify, (req, res) => {
 
     Users.update(id, req.body)
         .then(updated => {
-            res.status(200).json(updated)
+            Users.getById(id)
+                .then(user => {
+                    res.status(201).json(user)
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to get user' })
+                })
         })
         .catch(err => {
             console.log(err)
@@ -49,23 +56,19 @@ router.put('/:id', verify, (req, res) => {
 
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', verify, (req, res) => {
     const {id} = req.params;
 
     Users.getById(id)
         .then(user => {
-            if(user) {
-                Users.remove(id)
-                    .then(deleted => {
-                        res.status(200).json({message: `You deleted ${user.username}`})
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        res.status(500).json({ message: 'Failed to delete user' })
-                    })
-            } else {
-                res.status(404).json({message: 'User with given ID does not exist' })
-            }
+            Users.remove(id)
+                .then(deleted => {
+                    res.status(200).json({message: `You deleted username: ${user.username}`})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to delete user' })
+                })
         })
         .catch(err => {
             res.status(500).json({message: 'Failed to find user' })

@@ -14,6 +14,10 @@ exports.up = function(knex) {
 
         table.integer('upvotes').defaultTo(0)
 
+        table.timestamp('created_at').defaultTo(knex.fn.now())
+
+        table.timestamp('updated_at').defaultTo(knex.fn.now())
+
         table.integer('user_id')
             .unsigned()
             .notNullable()

@@ -93,13 +93,20 @@ router.post('/:id/issues', verifyState, (req, res) => {
 router.delete('/:id/issues/:id2', verifyState, verifyIssue, (req, res) => {
     const id = req.params.id2;
 
-    States.removeIssue(id)
-        .then(deleted => {
-            res.status(200).json(deleted)
+    States.getIssueById(id)
+        .then(issue => {
+            States.removeIssue(id)
+                .then(deleted => {
+                    res.status(200).json({message: `You deleted issue id ${issue.id}: ${issue.title} `})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to remove issue' })
+                })
         })
         .catch(err => {
             console.log(err)
-            res.status(500).json({ message: 'Failed to remove issue' })
+            res.status(500).json({message: 'Failed to get issue' })
         })
 })
 
@@ -108,7 +115,14 @@ router.put('/:id/issues/:id2', verifyState, verifyIssue, (req, res) => {
 
     States.updateIssue(id, req.body)
         .then(updated => {
-            res.status(201).json(updated)
+            States.getIssueById(id)
+                .then(issue => {
+                    res.status(201).json(issue)
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).json({ message: 'Failed to get issue' })
+                })
         })
         .catch(err => {
             console.log(err)
