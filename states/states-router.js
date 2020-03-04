@@ -16,19 +16,6 @@ router.get('/', (req, res) => {
         })
 })
 
-// router.post('/', (req, res) => {
-//     let newState = req.body;
-
-//     States.add(newState)
-//         .then(state => {
-//             res.status(201).json(state)
-//         })
-//         .catch(err => {
-//             console.log(err)
-//             res.status(500).json({ message: 'Failed to add state' })
-//         })
-// })
-
 router.get('/:id', verifyState, (req, res) => {
     const {id} = req.params;
 

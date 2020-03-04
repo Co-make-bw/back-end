@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('./users-model');
+const States = require('../states/states-model')
 
 const middleware = require('../auth/verify-middleware');
-const verify = middleware.verifyUser;
+const verifyUser = middleware.verifyUser;
+
 // Get all users
 router.get('/', (req, res) => {
 
@@ -18,7 +20,7 @@ router.get('/', (req, res) => {
 })
 
 // Get user by id
-router.get('/:id', verify, (req, res) => {
+router.get('/:id', verifyUser, (req, res) => {
     const {id} = req.params;
 
     Users.getById(id)
@@ -36,7 +38,7 @@ router.get('/:id', verify, (req, res) => {
 })
 
 // Update user
-router.put('/:id', verify, (req, res) => {
+router.put('/:id', verifyUser, (req, res) => {
     const {id} = req.params;
 
     Users.update(id, req.body)
@@ -57,7 +59,7 @@ router.put('/:id', verify, (req, res) => {
 })
 
 // Delete user
-router.delete('/:id', verify, (req, res) => {
+router.delete('/:id', verifyUser, (req, res) => {
     const {id} = req.params;
 
     Users.getById(id)
@@ -77,7 +79,7 @@ router.delete('/:id', verify, (req, res) => {
 })
 
 // Get user states
-router.get('/:id/states', verify, (req, res) => {
+router.get('/:id/states', verifyUser, (req, res) => {
     const {id} = req.params;
 
     Users.getStates(id)
@@ -95,7 +97,7 @@ router.get('/:id/states', verify, (req, res) => {
 })
 
 // Add state to user
-router.post('/:id/states', verify, (req, res) => {
+router.post('/:id/states', verifyUser, (req, res) => {
     const user_id = req.params.id;
     
     Users.addUserState(user_id, req.body.state_id)
@@ -107,4 +109,59 @@ router.post('/:id/states', verify, (req, res) => {
             res.status(500).json({ message: 'Failed to add state to user' })
         })
 })
+// Get a users state by id
+router.get('/:id/states/:id2', verifyUser, (req, res) => {
+    const user_id = req.params.id;
+    const state_id = req.params.id2;
+    
+    States.getById(state_id)
+        .then(state => {
+            if(state) {
+                Users.getUserState(user_id, state_id)
+                    .then(user_state => {
+                        if(user_state) {
+                            res.status(200).json(user_state)
+                        } else {
+                            res.status(404).json({message: `User does not belong to ${state.name}`})
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).json({ message: 'Failed to get user state' })
+                    })
+            } else {
+                res.status(404).json({message: 'State with given ID does not exist'})
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({message: 'Failed to find state'})
+        })
+})
+
+router.delete('/:id/states/:id2', verifyUser, (req, res) => {
+    const user_id = req.params.id;
+    const state_id = req.params.id2;
+
+    States.getById(state_id)
+        .then(state => {
+            if(state) {
+                Users.removeUserState(user_id, state_id)
+                    .then(state => {
+                        res.status(200).json(state)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).json({ message: 'Failed to remove user state' })
+                    })
+            } else {
+                res.status(404).json({message: 'State with given ID does not exist'})
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({message: 'Failed to find state'})
+        })
+})
+
 module.exports = router;
