@@ -32,6 +32,13 @@ describe('authentication router', () => {
             
             expect(res.type).toMatch(/json/)
         })
+        it('registers user as expected', async () => {
+            const res = await request(server)
+                .post('/api/auth/register')
+                .send({username: 'user', password: 'pass'})
+                
+            expect(res.body.username).toEqual("user")
+        })
     })
     describe('login', () => {
         it('should return 200 OK', async () => {
@@ -44,6 +51,17 @@ describe('authentication router', () => {
                 .send({username: 'user', password: 'pass'})
             
             expect(res.status).toBe(200)
+        })
+        it('should return a user ID, message, and token', async () => {
+            await request(server)
+                .post('/api/auth/register')
+                .send({username: 'user', password: 'pass'})
+
+            let res = await request(server)
+                .post('/api/auth/login')
+                .send({username: 'user', password: 'pass'})
+            
+            expect(res.body).toHaveProperty('user_id', 'message', 'token')
         })
     })
 })
