@@ -43,7 +43,9 @@ function addIssue(state_id, issue) {
 
 function getIssueById(id) {
     return db('issues')
-        .where({id})
+        .where({'issues.id': id})
+        .join('users', 'issues.user_id', 'users.id')
+        .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id', 'issues.created_at', 'issues.updated_at', 'users.username as posted_by')
         .first()
 }
 
