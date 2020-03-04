@@ -41,7 +41,9 @@
 | PUT          | /api/users/:id                 | Update User               |
 | DELETE       | /api/users/:id                 | Remove User               |
 | GET          | /api/users/:id/states          | Returns User states       |
+| GET          | /api/users/:id/states/:id      | Returns User state by ID  |
 | POST         | /api/users/:id/states          | Add state to user         |
+| DELETE       | /api/users/:id/states          | Deletes state from user   |
 ## States
 | Request Type | Endpoint                       | Description               |
 |:------------:|:------------------------------:|:-------------------------:|
@@ -154,6 +156,15 @@
     }
 ]
 ```
+### GET `api/users/:id/states/:id`
+- Where the second id parameter is the state_id
+- Returns a users followed state by id
+```js
+{
+    state: "Alabama",
+    state_id: 1
+}
+```
 
 ### POST `api/users/:id/states`
 - Adds a state to a users followed states
@@ -184,6 +195,9 @@
     }
 ]
 ```
+### DELETE `api/users/:id/states/:id`
+- Where the second id parameter is the state_id
+- Removes the state from a users followed states
 
 ## State routes
 ----------------
