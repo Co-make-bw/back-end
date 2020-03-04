@@ -1,12 +1,7 @@
 const request = require('supertest');
 const server = require('../api/server');
 const db = require('../data/dbConfig');
-// for decoding the token and easily extracting the id from the payload
-// const jsonwebtoken = require("jsonwebtoken");
-// for hashing the password successfully when we create users
-// const bcrypt = require("bcrypt");
 
-// our global object for storing auth information
 let token;
 
 describe('states router', () => {

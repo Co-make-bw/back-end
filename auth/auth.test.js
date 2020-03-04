@@ -3,14 +3,11 @@ const server = require('../api/server');
 const db = require('../data/dbConfig');
 
 describe('authentication router', () => {
-    it('should run the tests', () => {
-        expect(true).toBe(true)
-    })
-    beforeEach(async () => {
-        await db('users').del();
-    })
     describe('register', () => {
-        ('it returns 201 created', async () => {
+        beforeEach(async () => {
+            await db('users').del();
+        })
+        it('returns 201 created', async () => {
             const res = await request(server)
                 .post('/api/auth/register')
                 .send({username: 'user', password: 'pass'})
@@ -41,6 +38,9 @@ describe('authentication router', () => {
         })
     })
     describe('login', () => {
+        beforeEach(async () => {
+            await db('users').del();
+        })
         it('should return 200 OK', async () => {
             await request(server)
                 .post('/api/auth/register')

@@ -24,7 +24,6 @@ router.post('/login', (req, res) => {
     let { username, password } = req.body;
 
     Users.getBy({ username })
-        .first()
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = secrets.generateToken(user);
