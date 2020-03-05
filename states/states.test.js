@@ -4,10 +4,10 @@ const db = require('../data/dbConfig');
 
 let token;
 
+beforeEach(async () => {
+    await db('users').del()
+})
 describe('states router', () => {
-    beforeEach(async () => {
-        await db('users').del()
-    })
     it('should not allow access without token', async () => {
         const res = await request(server).get('/api/states');
 

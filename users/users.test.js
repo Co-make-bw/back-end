@@ -5,10 +5,13 @@ const Users = require('./users-model');
 
 let token;
 
+beforeEach(async () => {
+    await db('users').del()
+})
+afterAll(async () => {
+    await db('users').del()
+})
 describe('users route', () => {
-    beforeEach(async () => {
-        await db('users').del()
-    })
     describe('Authorization check', () => {
         it('should not allow access without a token', async () => {
             const res = await request(server).get('/api/users')
@@ -76,6 +79,52 @@ describe('users route', () => {
 
             let newUser = await Users.getById(user.id)
             expect(newUser.about).toBe('I like testing!')
+        })
+    })
+    // describe('remove()', () => {
+    //     it('should remove the user', async () => {
+    //         await Users.add({username: 'bob', password: 'bobbo'})
+    //         let user = await Users.add({username: 'Tom', password: 'ford'})
+
+    //         await Users.remove(user.id)
+            
+    //         let res = await db('users')
+
+    //         expect(res).toHaveLength(1)
+    //     })
+    // })
+    describe('getStates()', () => {
+        it('should only return a users states', async () => {
+            let user1 = await Users.add({username: 'bob', password: 'bobbo'})
+            let user2 = await Users.add({username: 'bill', password: 'billy'})
+
+            user1ID = user1.id;
+            user2ID = user2.id;
+
+            await Users.addUserState(user1ID, 21)
+
+            await Users.addUserState(user2ID, 20)
+            await Users.addUserState(user2ID, 25)
+
+            let res = await Users.getStates(user1ID)
+            
+            let database = await db('user_states')
+            let res2 = database.filter(state => state.user_id === user1ID)
+            
+            expect(res[0].state_id).toBe(21)
+            expect(res[0].state_id).toBe(res2[0].state_id)
+            
+        })
+    })
+    describe('addUserStates()', () => {
+        it('should associate a state to a user', async () => {
+            let user = await Users.add({username: 'frodo', password: 'baggins'})
+            let userID = user.id
+            await Users.addUserState(userID, 21)
+            await Users.addUserState(userID, 29)
+
+            let res = await db('user_states')
+            expect(res.every(state => state.user_id === userID)).toBe(true)
         })
     })
 })
