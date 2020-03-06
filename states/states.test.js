@@ -5,7 +5,7 @@ const db = require('../data/dbConfig');
 let token;
 
 beforeEach(async () => {
-    await db('users').del()
+    return await db('users').del()
 })
 describe('states router', () => {
     it('should not allow access without token', async () => {

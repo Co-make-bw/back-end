@@ -3,10 +3,10 @@ const server = require('../api/server');
 const db = require('../data/dbConfig');
 
 beforeEach(async () => {
-    await db('users').del();
+    return await db('users').del();
 })
 afterAll(async () => {
-    await db('users').del();
+    return await db('users').del();
 })
 describe('authentication router', () => {
     describe('register', () => {

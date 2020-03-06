@@ -6,10 +6,10 @@ const Users = require('./users-model');
 let token;
 
 beforeEach(async () => {
-    await db('users').del()
+    return await db('users').del()
 })
 afterAll(async () => {
-    await db('users').del()
+    return await db('users').del()
 })
 describe('users route', () => {
     describe('Authorization check', () => {
@@ -125,6 +125,32 @@ describe('users route', () => {
 
             let res = await db('user_states')
             expect(res.every(state => state.user_id === userID)).toBe(true)
+        })
+    })
+    describe('getUserState()', () => {
+        it('should return the correct state', async () => {
+            let user = await Users.add({username: 'pippin', password: 'pip'})
+            let userID = user.id
+
+            await Users.addUserState(userID, 21)
+            let state = await Users.getUserState(userID, 21)
+
+            expect(state.state).toMatch('Massachusetts')
+        })
+    })
+    describe('removeUserState()', () => {
+        it('should remove the correct state', async () => {
+            let user = await Users.add({username: 'frodo', password: 'baggins'})
+            let userID = user.id
+
+            await Users.addUserState(userID, 21)
+            await Users.addUserState(userID, 29)
+
+            await Users.removeUserState(userID, 21)
+
+            let res = await Users.getUserState(userID, 21)
+
+            expect(res).toBeUndefined()
         })
     })
 })
