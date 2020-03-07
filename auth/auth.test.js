@@ -2,12 +2,13 @@ const request = require('supertest');
 const server = require('../api/server');
 const db = require('../data/dbConfig');
 
-beforeEach(async () => {
-    return await db('users').del();
+beforeEach(() => {
+    // return await db('users').del();
+    return db.raw("TRUNCATE users, users RESTART IDENTITY CASCADE")
 })
-afterAll(async () => {
-    return await db('users').del();
-})
+// afterAll(async () => {
+//     return await db('users').del();
+// })
 describe('authentication router', () => {
     describe('register', () => {
         it('returns 201 created', async () => {

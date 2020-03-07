@@ -5,11 +5,12 @@ const Users = require('./users-model');
 
 let token;
 
-beforeEach(async () => {
-    return await db('users').del()
+beforeEach(() => {
+    // return await db('users').del()
+    return db.raw("TRUNCATE users, users RESTART IDENTITY CASCADE")
 })
-afterAll(async () => {
-    return await db('users').del()
+afterEach(() => {
+    return db('users').del()
 })
 describe('users route', () => {
     describe('Authorization check', () => {
@@ -81,18 +82,18 @@ describe('users route', () => {
             expect(newUser.about).toBe('I like testing!')
         })
     })
-    // describe('remove()', () => {
-    //     it('should remove the user', async () => {
-    //         await Users.add({username: 'bob', password: 'bobbo'})
-    //         let user = await Users.add({username: 'Tom', password: 'ford'})
+    describe('remove()', () => {
+        it('should remove the user', async () => {
+            await Users.add({username: 'bob', password: 'bobbo'})
+            let user = await Users.add({username: 'Tom', password: 'ford'})
 
-    //         await Users.remove(user.id)
+            await Users.remove(user.id)
             
-    //         let res = await db('users')
+            let res = await db('users')
 
-    //         expect(res).toHaveLength(1)
-    //     })
-    // })
+            expect(res).toHaveLength(1)
+        })
+    })
     describe('getStates()', () => {
         it('should only return a users states', async () => {
             let user1 = await Users.add({username: 'bob', password: 'bobbo'})

@@ -42,6 +42,8 @@
 | DELETE       | /api/users/:id                 | Remove User               |
 | GET          | /api/users/:id/states          | Returns User states       |
 | GET          | /api/users/:id/states/:id      | Returns User state by ID  |
+| GET          | /api/users/:id/issues          | Returns User issues       |
+| GET          | /api/users/:id/issues/:id      | Returns User issue by ID  |
 | POST         | /api/users/:id/states          | Add state to user         |
 | DELETE       | /api/users/:id/states          | Deletes state from user   |
 ## States

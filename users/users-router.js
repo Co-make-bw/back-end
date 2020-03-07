@@ -139,6 +139,7 @@ router.get('/:id/states/:id2', verifyUser, (req, res) => {
         })
 })
 
+// Delete a users state
 router.delete('/:id/states/:id2', verifyUser, (req, res) => {
     const user_id = req.params.id;
     const state_id = req.params.id2;
@@ -161,6 +162,32 @@ router.delete('/:id/states/:id2', verifyUser, (req, res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({message: 'Failed to find state'})
+        })
+})
+
+// Get a users issues
+router.get('/:id/issues', (req, res) => {
+
+    Users.getUserIssues(req.params.id)
+        .then(issues => {
+            res.status(200).json(issues)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to get user issues' })
+        })
+})
+
+// Get a users issue
+router.get('/:id/issues/:id2', (req, res) => {
+
+    Users.getUserIssue(req.params.id, req.params.id2)
+        .then(issue => {
+            res.status(200).json(issue)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'Failed to get user issues' })
         })
 })
 
