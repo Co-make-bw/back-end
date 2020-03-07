@@ -10,7 +10,9 @@ module.exports = {
     getStates,
     addUserState,
     getUserState,
-    removeUserState
+    removeUserState,
+    getUserIssues,
+    getUserIssue
 }
 
 function get() {
@@ -79,3 +81,17 @@ function removeUserState(user_id, state_id) {
         .where({user_id, state_id})
         .del()
 }
+
+function getUserIssues(user_id) {
+    return db('issues')
+        .join('users', 'issues.user_id', 'users.id')
+        .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id', 'issues.created_at', 'issues.updated_at', 'users.username as posted_by')
+        .where({user_id})
+}
+
+// function getUserIssue(user_id, issue_id) {
+//     return db('issues')
+//         .join('users', 'issues.user_id', 'users.id')
+//         .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id', 'issues.created_at', 'issues.updated_at', 'users.username as posted_by')
+//         .where({user_id, issue_id})
+// }
