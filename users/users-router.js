@@ -183,7 +183,11 @@ router.get('/:id/issues/:id2', (req, res) => {
 
     Users.getUserIssue(req.params.id, req.params.id2)
         .then(issue => {
-            res.status(200).json(issue)
+            if(issue) {
+                res.status(200).json(issue)
+            } else {
+                res.status(404).json({ message: 'User issue was not found' })
+            }
         })
         .catch(err => {
             console.log(err)

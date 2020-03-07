@@ -89,9 +89,10 @@ function getUserIssues(user_id) {
         .where({user_id})
 }
 
-// function getUserIssue(user_id, issue_id) {
-//     return db('issues')
-//         .join('users', 'issues.user_id', 'users.id')
-//         .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id', 'issues.created_at', 'issues.updated_at', 'users.username as posted_by')
-//         .where({user_id, issue_id})
-// }
+function getUserIssue(user_id, issue_id) {
+    return db('issues')
+        .where({'issues.id': issue_id, 'users.id': user_id})
+        .join('users', 'issues.user_id', 'users.id')
+        .select('issues.id', 'issues.title', 'issues.description', 'issues.location', 'issues.upvotes', 'issues.user_id', 'issues.created_at', 'issues.updated_at', 'users.username as posted_by')
+        .first()
+}
