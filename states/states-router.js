@@ -34,11 +34,7 @@ router.get('/:id/issues', verifyState, (req, res) => {
 
     States.getIssues(id)
         .then(issues => {
-            if(issues.length < 1) {
-                res.status(404).json({message: 'This state is awesome, there are no open issues!'})
-            } else {
-                res.status(200).json(issues)
-            }
+            res.status(200).json(issues)
         })
         .catch(err => {
             console.log(err)
